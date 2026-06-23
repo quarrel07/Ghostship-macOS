@@ -502,12 +502,36 @@ if(USE_NETWORKING AND NOT CMAKE_SYSTEM_NAME STREQUAL "NintendoSwitch" AND NOT CM
     set(USE_TLS ON CACHE BOOL "" FORCE)
     set(USE_MBED_TLS ON CACHE BOOL "" FORCE)
     set(IXWEBSOCKET_INSTALL OFF CACHE BOOL "" FORCE)
+    # macOS: MbedTLS (used by ixwebsocket AND directly by Ghostship's net code) is a keg-only Homebrew
+    # formula, so put its prefix on CMAKE_PREFIX_PATH for ixwebsocket's FindMbedTLS. The legacy
+    # ctr_drbg/entropy API that PlayerIdentity.cpp needs was removed in mbedtls 4.x, so the 3.x line
+    # (mbedtls@3) is required.
+    if (APPLE)
+        find_program(BREW_EXECUTABLE brew)
+        if (BREW_EXECUTABLE)
+            execute_process(COMMAND ${BREW_EXECUTABLE} --prefix mbedtls@3
+                            OUTPUT_VARIABLE MBEDTLS3_PREFIX OUTPUT_STRIP_TRAILING_WHITESPACE
+                            ERROR_QUIET)
+            if (MBEDTLS3_PREFIX)
+                list(APPEND CMAKE_PREFIX_PATH "${MBEDTLS3_PREFIX}")
+            endif()
+        endif()
+    endif()
     FetchContent_MakeAvailable(ixwebsocket)
     target_link_libraries(${PROJECT_NAME} PRIVATE ixwebsocket)
     target_compile_definitions(${PROJECT_NAME} PRIVATE
         USE_NETWORKING
         GHOSTSHIP_VERSION="${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH}"
     )
+    # ixwebsocket links MbedTLS PRIVATE on a static lib, so the symbols don't propagate to this target;
+    # PlayerIdentity.cpp uses mbedtls directly, so find and link it (and its headers) explicitly.
+    if (APPLE AND MBEDTLS3_PREFIX)
+        find_library(MBEDTLS_LIB     mbedtls     PATHS "${MBEDTLS3_PREFIX}/lib" NO_DEFAULT_PATH)
+        find_library(MBEDX509_LIB    mbedx509    PATHS "${MBEDTLS3_PREFIX}/lib" NO_DEFAULT_PATH)
+        find_library(MBEDCRYPTO_LIB  mbedcrypto  PATHS "${MBEDTLS3_PREFIX}/lib" NO_DEFAULT_PATH)
+        target_include_directories(${PROJECT_NAME} PRIVATE "${MBEDTLS3_PREFIX}/include")
+        target_link_libraries(${PROJECT_NAME} PRIVATE ${MBEDTLS_LIB} ${MBEDX509_LIB} ${MBEDCRYPTO_LIB})
+    endif()
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "NintendoSwitch")
@@ -763,23 +787,12 @@ if ("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
 endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
-add_custom_target(CreateOSXIcons
-    COMMAND mkdir -p ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset
-    COMMAND sips -z 16 16     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_16x16.png
-    COMMAND sips -z 32 32     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_16x16@2x.png
-    COMMAND sips -z 32 32     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_32x32.png
-    COMMAND sips -z 64 64     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_32x32@2x.png
-    COMMAND sips -z 128 128   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_128x128.png
-    COMMAND sips -z 256 256   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_128x128@2x.png
-    COMMAND sips -z 256 256   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_256x256.png
-    COMMAND sips -z 512 512   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_256x256@2x.png
-    COMMAND sips -z 512 512   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_512x512.png
-    COMMAND cp                logo.png ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_512x512@2x.png
-    COMMAND iconutil -c icns -o ${CMAKE_BINARY_DIR}/macosx/ghostship.icns ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset
-    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMENT "Creating OSX icons ..."
-    )
-    add_dependencies(${PROJECT_NAME} CreateOSXIcons)
+# The macOS app icon is now the native Liquid Glass icon (macosx/GhostshipIcon.icon), compiled with
+# actool in cmake/macos/apple_bundle.cmake, replacing the old sips/iconutil .icns flow from logo.png.
+# Make sure the packed port assets (ghostship.o2r) are generated before the app links, then assemble
+# the self-contained, codesigned Ghostship.app.
+    add_dependencies(${PROJECT_NAME} GeneratePortO2R)
+    include(${CMAKE_SOURCE_DIR}/cmake/macos/apple_bundle.cmake)
     configure_file("${CMAKE_SOURCE_DIR}/Info.plist" "${CMAKE_BINARY_DIR}/Info.plist" COPYONLY)
 INSTALL(TARGETS ${PROJECT_NAME} DESTINATION ../MacOS COMPONENT Ghostship)
 if(ENABLE_SCRIPTING)

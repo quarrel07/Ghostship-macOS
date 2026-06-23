@@ -575,7 +575,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     "OK", "", [&]() {
                                         gsFast3dWindow = nullptr;
                                         context = nullptr;
-                                        exit(1);
+                                        _Exit(1);
                                     });
     } else if (shouldRegen) {
         GhostshipGui::RegisterPopup("Outdated ROM Archives",
@@ -624,7 +624,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
     #endif
                     std::string title =
                         !std::filesystem::exists(assets_path) ? "Missing ghostship.o2r" : "ghostship.o2r is outdated";
-                    GhostshipGui::RegisterPopup(title, msg, "OK", "", [&]() { exit(1); });
+                    GhostshipGui::RegisterPopup(title, msg, "OK", "", [&]() { _Exit(1); });
                 }
                 continue;*/
             }
@@ -652,7 +652,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    exit(0);
+                                    _Exit(0);
                                 });
                         } else {
                             windowsStep = WS_PERMS;
@@ -678,7 +678,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    exit(0);
+                                    _Exit(0);
                                 });
                         } else {
                             fclose(tfile);
@@ -691,7 +691,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                         threadPool = nullptr;
                                         gsFast3dWindow = nullptr;
                                         context = nullptr;
-                                        exit(0);
+                                        _Exit(0);
                                     });
                             }
                             windowsStep = WS_ONEDRIVE;
@@ -709,7 +709,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    exit(0);
+                                    _Exit(0);
                                 });
                         } else {
                             windowsStep = WS_DONE;
@@ -743,7 +743,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                             threadPool = nullptr;
                             gsFast3dWindow = nullptr;
                             context = nullptr;
-                            exit(0);
+                            _Exit(0);
                         });
                     break;
                 }
@@ -798,7 +798,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    exit(0);
+                                    _Exit(0);
                                 });
                         } else {
                             extractStep = ES_VERIFY;
@@ -861,7 +861,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                                     threadPool = nullptr;
                                                     gsFast3dWindow = nullptr;
                                                     context = nullptr;
-                                                    exit(0);
+                                                    _Exit(0);
                                                 });
                 }
 
@@ -914,7 +914,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
             threadPool = nullptr;
             gsFast3dWindow = nullptr;
             context = nullptr;
-            exit(0);
+            _Exit(0);
         }
         // Process window events for resize, mouse, keyboard events
         wnd->HandleEvents();
@@ -1034,17 +1034,37 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
 
 ImFont* GameEngine::CreateFontWithSize(float size, std::string fontPath) {
     auto mImGuiIo = &ImGui::GetIO();
+    // On a HiDPI/Retina display the ImGui overlay renders into a framebuffer scaled by the backing
+    // scale (e.g. 2x), but glyphs would be rasterized at the logical point size and then stretched up
+    // -> fuzzy menu text. Rasterize the atlas at a higher density via RasterizerDensity so text stays
+    // crisp. The atlas is baked once, but the ImGui scale option changes FontGlobalScale at runtime
+    // (stretching the fixed atlas); bake at backingScale * maxUiScale so FontGlobalScale then only ever
+    // downsamples a high-res atlas (supersampling, still sharp) instead of upscaling a low-res one ->
+    // crisp at every scale. On a standard-DPI display with the default 1.0 scale this is a no-op.
+    float dpiScale = 1.0f;
+    if (auto gui = Ship::Context::GetInstance()->GetWindow()->GetGui()) {
+        dpiScale = gui->GetDpiScale();
+    }
+    float maxUiScale = 1.0f;
+    for (float optionScale : imguiScaleOptionToValue) {
+        if (optionScale > maxUiScale) {
+            maxUiScale = optionScale;
+        }
+    }
+    float rasterDensity = dpiScale * maxUiScale;
     ImFont* font;
     if (fontPath == "") {
         ImFontConfig fontCfg = ImFontConfig();
         fontCfg.OversampleH = fontCfg.OversampleV = 1;
         fontCfg.PixelSnapH = true;
         fontCfg.SizePixels = size;
+        fontCfg.RasterizerDensity = rasterDensity;
         font = mImGuiIo->Fonts->AddFontDefault(&fontCfg);
     } else {
         auto initData = std::make_shared<Ship::ResourceInitData>();
         ImFontConfig config;
         config.FontDataOwnedByAtlas = false;
+        config.RasterizerDensity = rasterDensity;
 
         initData->Format = RESOURCE_FORMAT_BINARY;
         initData->Type = static_cast<uint32_t>(RESOURCE_TYPE_FONT);
@@ -1061,6 +1081,7 @@ ImFont* GameEngine::CreateFontWithSize(float size, std::string fontPath) {
     iconsConfig.MergeMode = true;
     iconsConfig.PixelSnapH = true;
     iconsConfig.GlyphMinAdvanceX = iconFontSize;
+    iconsConfig.RasterizerDensity = rasterDensity;
     mImGuiIo->Fonts->AddFontFromMemoryCompressedBase85TTF(fontawesome_compressed_data_base85, iconFontSize,
                                                           &iconsConfig, sIconsRanges);
 

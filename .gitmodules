@@ -1,6 +1,8 @@
 [submodule "Torch"]
 	path = Torch
-	url = https://github.com/HarbourMasters/Torch.git
+	url = https://github.com/quarrel07/Torch.git
+	branch = ghostship-macos
 [submodule "libultraship"]
 	path = libultraship
-	url = https://github.com/Kenix3/libultraship
+	url = https://github.com/quarrel07/libultraship.git
+	branch = ghostship-macos
