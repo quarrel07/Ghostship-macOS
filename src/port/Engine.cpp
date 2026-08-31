@@ -575,7 +575,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     "OK", "", [&]() {
                                         gsFast3dWindow = nullptr;
                                         context = nullptr;
-                                        _Exit(1);
+                                        exit(1);
                                     });
     } else if (shouldRegen) {
         GhostshipGui::RegisterPopup("Outdated ROM Archives",
@@ -624,7 +624,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
     #endif
                     std::string title =
                         !std::filesystem::exists(assets_path) ? "Missing ghostship.o2r" : "ghostship.o2r is outdated";
-                    GhostshipGui::RegisterPopup(title, msg, "OK", "", [&]() { _Exit(1); });
+                    GhostshipGui::RegisterPopup(title, msg, "OK", "", [&]() { exit(1); });
                 }
                 continue;*/
             }
@@ -652,7 +652,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    _Exit(0);
+                                    exit(0);
                                 });
                         } else {
                             windowsStep = WS_PERMS;
@@ -678,7 +678,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    _Exit(0);
+                                    exit(0);
                                 });
                         } else {
                             fclose(tfile);
@@ -691,7 +691,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                         threadPool = nullptr;
                                         gsFast3dWindow = nullptr;
                                         context = nullptr;
-                                        _Exit(0);
+                                        exit(0);
                                     });
                             }
                             windowsStep = WS_ONEDRIVE;
@@ -709,7 +709,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    _Exit(0);
+                                    exit(0);
                                 });
                         } else {
                             windowsStep = WS_DONE;
@@ -743,7 +743,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                             threadPool = nullptr;
                             gsFast3dWindow = nullptr;
                             context = nullptr;
-                            _Exit(0);
+                            exit(0);
                         });
                     break;
                 }
@@ -798,7 +798,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                     threadPool = nullptr;
                                     gsFast3dWindow = nullptr;
                                     context = nullptr;
-                                    _Exit(0);
+                                    exit(0);
                                 });
                         } else {
                             extractStep = ES_VERIFY;
@@ -861,7 +861,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
                                                     threadPool = nullptr;
                                                     gsFast3dWindow = nullptr;
                                                     context = nullptr;
-                                                    _Exit(0);
+                                                    exit(0);
                                                 });
                 }
 
@@ -914,7 +914,7 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
             threadPool = nullptr;
             gsFast3dWindow = nullptr;
             context = nullptr;
-            _Exit(0);
+            exit(0);
         }
         // Process window events for resize, mouse, keyboard events
         wnd->HandleEvents();
