@@ -40,7 +40,7 @@ cmake -S . -B build -GNinja -DCMAKE_BUILD_TYPE=Release -DSDL2_DIR="$(brew --pref
 cmake --build build --parallel
 ```
 
-Homebrew dependencies: sdl2-compat, sdl3, glew, libzip, nlohmann-json, tinyxml2, mbedtls@3, ninja. Built and tested on an M-series Mac running macOS 26 with current Xcode; other setups may need adjustments.
+Homebrew dependencies: sdl2-compat, sdl3, glew, libzip, nlohmann-json, tinyxml2, mbedtls@3, ninja. Built and tested on macOS 26 (arm64) with current Xcode; other setups may need adjustments.
 
 Packaging into the dmg is upstream's own CPack flow: `cd build && cpack`.
 
