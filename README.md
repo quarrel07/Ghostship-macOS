@@ -5,7 +5,7 @@
 > Retina/HiDPI menu text**, a **clean quit** when you decline the first-run ROM prompt, a **fix for
 > the press-and-hold accent popup** while moving, a native **Liquid Glass app icon**, and the build
 > fixes needed for a current Apple-clang / CMake toolchain.
-> **→ [Download the prebuilt macOS app](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (Apple Silicon), or see
+> **→ [Download the prebuilt macOS app](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (arm64), or see
 > **[README-macOS.md](README-macOS.md)** for what's different and how to build it yourself.
 > This fork is pinned to upstream playtest commit `86364855` (not the very latest develop) because a
 > newer upstream libultraship commit regressed the Metal renderer — pinning here keeps Metal working.

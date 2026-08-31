@@ -11,7 +11,7 @@ file(REAL_PATH "${APP}" APP)
 
 # Where fixup_bundle should look for the dependencies it needs to copy in.
 set(SEARCH_DIRS
-    "/opt/homebrew/lib"          # Homebrew (Apple Silicon)
+    "/opt/homebrew/lib"          # Homebrew (arm64)
     "/usr/local/lib"             # Homebrew (Intel) / misc
     "/opt/local/lib"             # MacPorts
     "${APP_BUNDLE}/Contents/Frameworks"

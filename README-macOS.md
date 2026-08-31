@@ -13,7 +13,7 @@ A macOS-optimized fork of [HarbourMasters/Ghostship](https://github.com/HarbourM
 [libultraship](https://github.com/Kenix3/libultraship) and [Torch](https://github.com/HarbourMasters/Torch)).
 
 The goal of this fork is simple: **a plain build produces a self-contained, codesigned `Ghostship.app`**
-that launches on any modern Apple-Silicon Mac with no extra setup — plus crisp Retina text, a native
+that launches on any modern arm64 Mac with no extra setup — plus crisp Retina text, a native
 Liquid Glass icon, an input fix, and the fixes needed to build cleanly on a current Apple-clang / CMake
 toolchain. Gameplay, assets, and the rest of the project are unchanged from upstream — you still provide
 your own *Super Mario 64* ROM.
@@ -21,7 +21,7 @@ your own *Super Mario 64* ROM.
 > **Why it's pinned to a specific commit.** This fork tracks upstream **playtest commit `86364855`**
 > (libultraship `7c6950e7`), not the very latest `develop`. A newer upstream libultraship commit
 > (`11ad2a55`, pulled in by the "custom uniforms" change) **regressed the Metal renderer** — it crashes
-> in the 3D draw path on Apple Silicon / macOS 26. `86364855` is the last commit whose Metal backend
+> in the 3D draw path on arm64 / macOS 26. `86364855` is the last commit whose Metal backend
 > works (it's the same commit as the upstream prebuilt playtest build). Once upstream fixes Metal, this
 > fork can move forward.
 
