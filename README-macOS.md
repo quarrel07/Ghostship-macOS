@@ -8,27 +8,14 @@
   <sub>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>macOS 26 Tahoe</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>macOS 27 Golden Gate</b></sub>
 </p>
 
-This fork carries a set of macOS fixes on top of upstream [HarbourMasters/Ghostship](https://github.com/HarbourMasters/Ghostship) develop. The plan is to submit each fix upstream, and as they land there this fork shrinks; eventually it won't need to exist, which is the goal.
-
+This fork carries fixes on top of upstream [HarbourMasters/Ghostship](https://github.com/HarbourMasters/Ghostship) develop. What each build adds is listed in its [release notes](https://github.com/quarrel07/Ghostship-macOS/releases).
 
 **[Download the latest release](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (arm64 dmg).
 
 ## Branches
 
 - `develop` mirrors upstream.
-- `macos-rebase` is upstream develop plus the fixes below, and is what releases are built from.
-
-## What's changed
-
-- HiDPI viewport handling: the game fills the window on Retina displays, and 100% internal resolution means your display's true pixels
-- Menu text renders at Retina density, and stays crisp at every menu-scale setting
-- Holding movement keys doesn't trigger the macOS accent popup
-- Save data is mirrored to its backup slot at load ([#207](https://github.com/HarbourMasters/Ghostship/issues/207))
-- The app reports its real version ([#219](https://github.com/HarbourMasters/Ghostship/issues/219))
-- Liquid Glass app icon on macOS 26+
-- Builds against Homebrew's mbedtls@3, and the packaged app bundles SDL3 next to sdl2-compat
-
-Rendering and font changes live in the [libultraship fork branch](https://github.com/quarrel07/libultraship/tree/ghostship-macos-r2) the submodule points at.
+- `macos-rebase` is upstream develop plus the fork's changes, and is what releases are built from. Some changes live in the [libultraship fork](https://github.com/quarrel07/libultraship) the submodule points at.
 
 ## Building
 
@@ -45,4 +32,4 @@ Packaging into the dmg is upstream's own CPack flow: `cd build && cpack`.
 
 ## Credits
 
-All credit for Ghostship to [Lywx](https://github.com/kiritodv) and the [HarbourMasters](https://github.com/HarbourMasters) team and the [libultraship](https://github.com/Kenix3/libultraship) project.
+All credit for Ghostship to [Lywx](https://github.com/kiritodv) and the [HarbourMasters](https://github.com/HarbourMasters) team and the [libultraship](https://github.com/Kenix3/libultraship) project. Everything here builds on their work.
