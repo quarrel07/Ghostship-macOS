@@ -4,6 +4,11 @@
 > This fork adds macOS quality-of-life fixes on top of upstream develop, with the goal of submitting each one upstream.
 > **[Download the prebuilt Mac app](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (arm64), or see [README-macOS.md](README-macOS.md) for what's changed and how to build.
 
+<table align="center"><tr>
+<td align="center"><img src="icons/preview/liquid-glass-macos26.png" width="140" alt="Liquid Glass icon on macOS 26"><br><sub><b>macOS 26</b></sub></td>
+<td align="center"><img src="icons/preview/liquid-glass-macos27.png" width="140" alt="Liquid Glass icon on macOS 27"><br><sub><b>macOS 27</b></sub></td>
+</tr></table>
+
 Lead Developers:
 * [Lywx](https://www.github.com/kiritodv)
 
