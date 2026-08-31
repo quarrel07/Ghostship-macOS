@@ -22,7 +22,6 @@ This fork carries a set of macOS fixes on top of upstream [HarbourMasters/Ghosts
 
 - HiDPI viewport handling: the game fills the window on Retina displays, and 100% internal resolution means your display's true pixels
 - Menu text renders at Retina density, and stays crisp at every menu-scale setting
-- The cursor appears only while the menu is open, or with "Cursor Always Visible" enabled
 - Holding movement keys doesn't trigger the macOS accent popup
 - Save data is mirrored to its backup slot at load ([#207](https://github.com/HarbourMasters/Ghostship/issues/207))
 - The app reports its real version ([#219](https://github.com/HarbourMasters/Ghostship/issues/219))
