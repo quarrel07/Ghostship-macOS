@@ -1,5 +1,9 @@
 # Ghostship
 
+> ## macOS fork
+> This fork adds macOS quality-of-life fixes on top of upstream develop, with the goal of submitting each one upstream.
+> **[Download the prebuilt Mac app](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (arm64), or see [README-macOS.md](README-macOS.md) for what's changed and how to build.
+
 Lead Developers:
 * [Lywx](https://www.github.com/kiritodv)
 
