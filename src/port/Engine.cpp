@@ -1069,25 +1069,16 @@ void GameEngine::RunExtract(int argc, char* argv[]) {
 
 ImFont* GameEngine::CreateFontWithSize(float size, std::string fontPath) {
     auto mImGuiIo = &ImGui::GetIO();
-    // On a HiDPI/Retina display the ImGui overlay renders into a framebuffer scaled by the backing
-    // scale (e.g. 2x), but glyphs would be rasterized at the logical point size and then stretched up
-    // -> fuzzy menu text. Rasterize the atlas at a higher density via RasterizerDensity so text stays
-    // crisp. The atlas is baked once, but the ImGui scale option changes FontGlobalScale at runtime
-    // (stretching the fixed atlas); bake at backingScale * maxUiScale so FontGlobalScale then only ever
-    // downsamples a high-res atlas (supersampling, still sharp) instead of upscaling a low-res one ->
-    // crisp at every scale. On a standard-DPI display with the default 1.0 scale this is a no-op.
-    float dpiScale = 1.0f;
-    if (auto gui = Ship::Context::GetInstance()->GetWindow()->GetGui()) {
-        dpiScale = gui->GetDpiScale();
-    }
-    float maxUiScale = 1.0f;
-    for (float optionScale : imguiScaleOptionToValue) {
-        if (optionScale > maxUiScale) {
-            maxUiScale = optionScale;
-        }
-    }
-    float rasterDensity = dpiScale * maxUiScale;
     ImFont* font;
+    // Rasterize the glyph atlas at higher density so menu text stays sharp on HiDPI/Retina
+    // displays. Bake at retinaScale * maxMenuScale so the runtime ImGui Menu Scaling setting
+    // (FontGlobalScale) only ever downsamples the atlas rather than stretching it blurry.
+    float rasterDensity = 1.0f;
+#if defined(__APPLE__)
+    constexpr float kRetinaScale = 2.0f;  // Retina backing scale
+    constexpr float kMaxMenuScale = 2.0f; // keep in sync with imguiScaleOptionToValue's max
+    rasterDensity = kRetinaScale * kMaxMenuScale;
+#endif
     if (fontPath == "") {
         ImFontConfig fontCfg = ImFontConfig();
         fontCfg.OversampleH = fontCfg.OversampleV = 1;
