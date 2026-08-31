@@ -983,20 +983,9 @@ endif()
 
 if(CMAKE_SYSTEM_NAME MATCHES "Darwin")
 add_custom_target(CreateOSXIcons
-    COMMAND mkdir -p ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset
-    COMMAND sips -z 16 16     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_16x16.png
-    COMMAND sips -z 32 32     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_16x16@2x.png
-    COMMAND sips -z 32 32     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_32x32.png
-    COMMAND sips -z 64 64     logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_32x32@2x.png
-    COMMAND sips -z 128 128   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_128x128.png
-    COMMAND sips -z 256 256   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_128x128@2x.png
-    COMMAND sips -z 256 256   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_256x256.png
-    COMMAND sips -z 512 512   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_256x256@2x.png
-    COMMAND sips -z 512 512   logo.png --out ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_512x512.png
-    COMMAND cp                logo.png ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset/icon_512x512@2x.png
-    COMMAND iconutil -c icns -o ${CMAKE_BINARY_DIR}/macosx/ghostship.icns ${CMAKE_BINARY_DIR}/macosx/ghostship.iconset
+    COMMAND /bin/sh ${CMAKE_SOURCE_DIR}/macosx/build-icon.sh ${CMAKE_BINARY_DIR}/macosx
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
-    COMMENT "Creating OSX icons ..."
+    COMMENT "Creating OSX icons (Liquid Glass via actool, sips fallback) ..."
     )
     add_dependencies(${PROJECT_NAME} CreateOSXIcons)
     configure_file("${CMAKE_SOURCE_DIR}/Info.plist" "${CMAKE_BINARY_DIR}/Info.plist" @ONLY)
@@ -1006,6 +995,8 @@ if(ENABLE_SCRIPTING)
 endif()
 INSTALL(FILES ${CMAKE_BINARY_DIR}/gamecontrollerdb.txt DESTINATION ../MacOS COMPONENT Ghostship)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/ghostship.o2r DESTINATION ../Resources COMPONENT Ghostship)
+# Liquid Glass icon catalog; produced by CreateOSXIcons when actool is available (OPTIONAL otherwise)
+INSTALL(FILES ${CMAKE_BINARY_DIR}/macosx/Assets.car DESTINATION ../Resources COMPONENT Ghostship OPTIONAL)
 INSTALL(FILES ${CMAKE_BINARY_DIR}/config.yml DESTINATION ../Resources COMPONENT Ghostship)
 INSTALL(DIRECTORY ${CMAKE_BINARY_DIR}/assets/ DESTINATION ../Resources/assets COMPONENT Ghostship)
 
