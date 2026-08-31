@@ -1,14 +1,15 @@
 # Ghostship on macOS
 
-This fork carries a set of macOS fixes on top of upstream [HarbourMasters/Ghostship](https://github.com/HarbourMasters/Ghostship) develop. The plan is to submit each fix upstream, and as they land there this fork shrinks; eventually it won't need to exist, which is the goal.
-
 <p align="center">
   <img src="icons/preview/liquid-glass-macos26.png" width="168" alt="Liquid Glass app icon rendered on macOS 26">
   &nbsp;&nbsp;&nbsp;
   <img src="icons/preview/liquid-glass-macos27.png" width="168" alt="Liquid Glass app icon rendered on macOS 27">
   <br>
-  <sub><b>Liquid Glass app icon</b>: macOS 26 Tahoe (left) &nbsp;&middot;&nbsp; macOS 27 Golden Gate (right)</sub>
+  <sub><b>macOS 26 Tahoe</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>macOS 27 Golden Gate</b></sub>
 </p>
+
+This fork carries a set of macOS fixes on top of upstream [HarbourMasters/Ghostship](https://github.com/HarbourMasters/Ghostship) develop. The plan is to submit each fix upstream, and as they land there this fork shrinks; eventually it won't need to exist, which is the goal.
+
 
 **[Download the latest release](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (arm64 dmg).
 

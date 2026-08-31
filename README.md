@@ -1,14 +1,15 @@
-> ## macOS fork
-> This fork adds macOS quality-of-life fixes on top of upstream develop, with the goal of submitting each one upstream.
-> **[Download the prebuilt Mac app](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (arm64), or see [README-macOS.md](README-macOS.md) for what's changed and how to build.
-
 <p align="center">
   <img src="icons/preview/liquid-glass-macos26.png" width="168" alt="Liquid Glass app icon rendered on macOS 26">
   &nbsp;&nbsp;&nbsp;
   <img src="icons/preview/liquid-glass-macos27.png" width="168" alt="Liquid Glass app icon rendered on macOS 27">
   <br>
-  <sub><b>Liquid Glass app icon</b>: macOS 26 Tahoe (left) &nbsp;&middot;&nbsp; macOS 27 Golden Gate (right)</sub>
+  <sub><b>macOS 26 Tahoe</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>macOS 27 Golden Gate</b></sub>
 </p>
+
+> ## macOS fork
+> This fork adds macOS quality-of-life fixes on top of upstream develop, with the goal of submitting each one upstream.
+> **[Download the prebuilt Mac app](https://github.com/quarrel07/Ghostship-macOS/releases/latest)** (arm64), or see [README-macOS.md](README-macOS.md) for what's changed and how to build.
+
 
 ---
 
